@@ -1,4 +1,4 @@
-# Vision Plugin Api
+# ![logo](./images/vision-logo.svg "Vision") &nbsp; Vision Plugin Api
 
 Vision plugins must implement one of the versions of the api. Vision will
 be backward compatible so if the vision-cli tool is on v2, it will continue
