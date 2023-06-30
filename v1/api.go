@@ -1,22 +1,24 @@
 package v1
 
 // A plugin must accept a json serialized PluginRequest from stdin and return a json serialized PluginResponse.
-// Two commands are present in the v1 api : 'usage' and 'run'. A plugin must return a json serialized
-// PluginResponse unless the command is 'usage' in which case it must return a json serialized PluginUsageResponse.
+// The commands present in the v1 api are listed in the Commands constants below.
+// A plugin must return a json serialized response based on the command sent. The response types are indicated below.
 // If an error occurrs during the execution of the plugin, the plugin must return a PluginResponse with the
 // 'Result' set to an empty string and the error message in 'Error'.
 
+// Commands that the plugin must support
 const (
-	CommandUsage = "usage"
-	CommandRun   = "run"
+	CommandUsage  = "usage"
+	CommandConfig = "config"
+	CommandRun    = "run"
 )
 
 // PluginRequest is the structure that is passed to the plugin from the CLI
 type PluginRequest struct {
-	Command      string             // v1 plugins must support 'usage' and 'run'
-	Args         []string           // blank if the command is 'usage', otherwise the sub commands e.g. create, delete, etc if the command is 'run'
-	Flags        []PluginFlag       // blank if the command is 'usage', otherwise the flags structure provided at the command line
-	Placeholders PluginPlaceholders // blank if the command is 'usage', otherwise the placeholders structure built from the config file and flags
+	Command      string             // v1 plugins must support commands listed in the Commands constants above
+	Args         []string           // blank if the command is 'usage' or 'config', otherwise the sub commands e.g. create, delete, etc if the command is 'run'
+	Flags        []PluginFlag       // blank if the command is 'usage' or 'config', otherwise the flags structure provided at the command line
+	Placeholders PluginPlaceholders // blank if the command is 'usage' or 'config', otherwise the placeholders structure built from the config file and flags
 }
 
 // PluginResponse is the default structure that is returned from the plugin to the CLI
@@ -27,13 +29,14 @@ type PluginResponse struct {
 
 // PluginUsageResponse is the structure that is returned from the plugin to the CLI when the command is 'usage'
 type PluginUsageResponse struct {
-	Version     string       // API version supported (the package name above)
-	Use         string       // The command name
-	Short       string       // Short description shown in the 'usage' output
-	Long        string       // Long description shown in the 'usage' output
-	Example     string       // Example shown in the 'usage' output
-	Subcommands []string     // Subcommands shown in the 'usage' output
-	Flags       []PluginFlag // Flags required in addition to the standard ConfigFlags
+	Version        string       // API version supported (the package name above)
+	Use            string       // The command name
+	Short          string       // Short description shown in the 'usage' output
+	Long           string       // Long description shown in the 'usage' output
+	Example        string       // Example shown in the 'usage' output
+	Subcommands    []string     // Subcommands shown in the 'usage' output
+	Flags          []PluginFlag // Flags required in addition to the standard ConfigFlags
+	RequiresConfig bool         // Whether the plugin requires a config file
 }
 
 type PluginFlag struct {
@@ -43,6 +46,18 @@ type PluginFlag struct {
 	Usage     string // usage description of the flag
 }
 
+// PluginConfigResponse is the structure that is returned from the plugin to the CLI when the command is 'config'
+type PluginConfigResponse struct {
+	Defaults []PluginConfigItem // the default config items that the CLI will write to the config file
+}
+
+type PluginConfigItem struct {
+	Key     string // key of the config item
+	Default string // default value of the config item
+}
+
+// The placeholders structure is built from the config file, flags, and best practice conventions that
+// is passed to the plugin from the CLI. The placeholders structure is used to build the templates
 type PluginPlaceholders struct {
 	// ----------------------- project --------------------------
 
