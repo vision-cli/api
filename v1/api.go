@@ -145,4 +145,9 @@ type PluginPlaceholders struct {
 
 	// protocol buffer package name, e.g. namespace.v1_testservice.v1
 	ProtoPackage string
+
+	// ----------------------- graphql --------------------------
+
+	// deployment type, e.g. standalone-graphql, standalone-gateway
+	Deployment string
 }
