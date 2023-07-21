@@ -90,6 +90,9 @@ type PluginPlaceholders struct {
 	// major version of the service api, e.g. v1. This can be overridden with the -v --version flag
 	Version string
 
+	// A unique string used to generate unique names for resources e.g. myproject-agshrt
+	UniqueStr string
+
 	// ----------------------- services --------------------------
 
 	// The fully qualified namespace of default project services e.g. github.com/mycompany/myproject/services/default
