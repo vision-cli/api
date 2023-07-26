@@ -3,7 +3,7 @@ package v1
 // A plugin must accept a json serialized PluginRequest from stdin and return a json serialized PluginResponse.
 // The commands present in the v1 api are listed in the Commands constants below.
 // A plugin must return a json serialized response based on the command sent. The response types are indicated below.
-// If an error occurrs during the execution of the plugin, the plugin must return a PluginResponse with the
+// If an error occurs during the execution of the plugin, the plugin must return a PluginResponse with the
 // 'Result' set to an empty string and the error message in 'Error'.
 
 // Commands that the plugin must support
@@ -62,16 +62,14 @@ type PluginPlaceholders struct {
 	// ----------------------- project --------------------------
 
 	// Project Root - this is the root project folder where services, packages, etc can be found
-	// relative to where the command has been run, for example if the command is run from the
-	// the project folder itself e.g. user/demo, the Project Root will be "." whereas if
-	// the command is run from the "user" folder then the Project Root will be "demo"
-	// The go.work file should be placed here
+	// and is passed as an absolute path. It is where the vision.json and go.work files are found.
+	// It is currently the directory where the vision command has been run.
 	ProjectRoot string
 
-	// Name of the the project regardless of the project root e.g. myproject
+	// Name of the project regardless of the project root e.g. myproject
 	ProjectName string
 
-	// Name of the the project directory e.g. my-project
+	// Name of the project directory e.g. my-project
 	ProjectDirectory string
 
 	// The fully qualified namespace of the project e.g. github.com/mycompany/myproject
@@ -96,7 +94,7 @@ type PluginPlaceholders struct {
 	// ----------------------- services --------------------------
 
 	// The fully qualified namespace of default project services e.g. github.com/mycompany/myproject/services/default
-	// This is constructed from <ProjectFqn>/<ServicesDirectory>/<DefautlServiceNamespace>
+	// This is constructed from <ProjectFqn>/<ServicesDirectory>/<DefaultServiceNamespace>
 	ServicesFqn string
 
 	// the services directory e.g. services
