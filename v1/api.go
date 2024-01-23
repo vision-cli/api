@@ -10,7 +10,9 @@ type Version struct {
 }
 
 type Init struct {
-	Config any `json:"config"`
+	Config  any    `json:"config"`
+	Success bool   `json:"success"`
+	Output  string `json:"output"`
 }
 
 type Add struct {
